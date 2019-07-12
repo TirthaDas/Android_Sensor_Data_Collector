@@ -2,10 +2,10 @@
   width: 70%;
   margin:auto;
 } */
-:host {
+/* :host {
   display: block;
   margin-top: 1rem;
-}
+} */
 mat-form-field, textarea{
   width: 100%;
 }
