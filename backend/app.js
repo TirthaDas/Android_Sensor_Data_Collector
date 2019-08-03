@@ -4,6 +4,18 @@ const express = require('express');
 const bodyParser=require('body-parser');
 const Post = require('./models/post');
 const User = require('./models/user');
+const SensorData = require('./models/sensorData');
+const multer = require('multer')
+var path = require('path');
+const storage= multer.diskStorage({
+  destination:function(req,file,cb){
+    cb(null,path.join(__dirname+'/uploadss'))
+  },
+  filename:function(req,file,cb){
+    cb(null,file.originalname)
+  }
+})
+const upload = multer({storage:storage})
 
 const mongoose = require('mongoose');
 
@@ -162,4 +174,30 @@ app.delete('/api/posts/:id',(req,res,next)=>{
       console.log(err)
     })
   });
+
+
+
+  /*
+  UPLOAD THE SENSOR DATA
+  */
+
+  app.post("/api/uploadSensorData",upload.single('SensorData'),(req,res,next)=>{
+    console.log('requesss',req)  
+    const sensorData=new SensorData({
+        name:req.body.name,
+        sensorData:req.file.path,
+        userId:req.body.userId
+        
+      });
+      sensorData
+      .save()
+      .then((result)=>{
+        console.log(result)
+        res.status(200).json({message:'sensor data file succesfully addedd'});
+  
+      }).catch((err) => {
+        console.log(err)
+      })
+
+  })
 module.exports = app;
