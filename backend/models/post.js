@@ -10,7 +10,34 @@ const postSchema = mongoose.Schema({
     type:String,
     trim:true,
     default:true
-  }
+  },
+  // gyroscope:{
+  //   type:Boolean,
+  //   default:false
+  // },
+  // accelerometer:{
+  //   type:Boolean,
+  //   default:false
+  // },
+  // orientation:{
+  //   type:Boolean,
+  //   default:false
+  // },
+  // proximity:{
+  //   type:Boolean,
+  //   default:false
+  // },
+  // light:{
+  //   type:Boolean,
+  //   default:false
+  // },
+  // magneticField:{
+  //   type:Boolean,
+  //   default:false
+  // },
+  sensorList:[String],
+  activeUsers:[Schema.Types.ObjectId]
+
 });
 
 module.exports=mongoose.model('Post',postSchema);

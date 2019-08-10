@@ -12,7 +12,7 @@ const sensorDataSchema = mongoose.Schema({
     require:true
   },
   userId: {type:mongoose.Schema.Types.ObjectId, ref:'User' } ,
-
+  projectId:{type:mongoose.Schema.Types.ObjectId,ref:'Post'}
 
 });
 

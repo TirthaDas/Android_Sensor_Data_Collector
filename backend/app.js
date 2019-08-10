@@ -186,7 +186,35 @@ app.delete('/api/posts/:id',(req,res,next)=>{
     const sensorData=new SensorData({
         name:req.body.name,
         sensorData:req.file.path,
-        userId:req.body.userId
+        userId:req.body.userId,
+        projectId:req.body.projectId
+        
+      });
+      sensorData
+      .save()
+      .then((result)=>{
+        console.log(result)
+        res.status(200).json({message:'sensor data file succesfully addedd'});
+  
+      }).catch((err) => {
+        console.log(err)
+      })
+
+  })
+
+
+/*
+  ADD A USER TO POSTS
+*/
+  addUsersToPosts
+  app.post("/api/addUsersToPosts",(req,res,next)=>{
+    console.log('requesss',req)  
+
+    const sensorData=new SensorData({
+        name:req.body.name,
+        sensorData:req.file.path,
+        userId:req.body.userId,
+        projectId:req.body.projectId
         
       });
       sensorData
