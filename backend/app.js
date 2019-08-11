@@ -49,7 +49,8 @@ app.use((req,res,next)=>{
 app.post("/api/posts",(req,res,next)=>{
   const post=new Post({
     title:req.body.title,
-    content:req.body.content
+    content:req.body.content,
+    activeUser:[]
   });
   console.log('new post added',post);
   post.save().then((createdPost) => {
@@ -182,7 +183,7 @@ app.delete('/api/posts/:id',(req,res,next)=>{
   */
 
   app.post("/api/uploadSensorData",upload.single('SensorData'),(req,res,next)=>{
-    console.log('requesss',req)  
+    // console.log('requesss',req)  
     const sensorData=new SensorData({
         name:req.body.name,
         sensorData:req.file.path,
@@ -206,26 +207,49 @@ app.delete('/api/posts/:id',(req,res,next)=>{
 /*
   ADD A USER TO POSTS
 */
-  addUsersToPosts
-  app.post("/api/addUsersToPosts",(req,res,next)=>{
-    console.log('requesss',req)  
 
-    const sensorData=new SensorData({
-        name:req.body.name,
-        sensorData:req.file.path,
-        userId:req.body.userId,
-        projectId:req.body.projectId
+  app.post("/api/addUsersToPosts",(req,res,next)=>{
+    const userId = req.body.userId;
+    const projectId = req.body.projectId;
+    console.log('addUsersToPosts',userId,projectId,typeof(userId))  
+
+    Post.findOne({"_id":projectId}).then((post)=>{
+      if(!post || post.length==0){
+        res.status(201).json({
+          message:'post not found',
+          
+        })
+      }else{
+        ActiveUsersList=post.activeUsers
+        console.log('in',post.activeUsers,"out",userId)
+        for (activeUser of ActiveUsersList){
+          console.log("1",activeUser,typeof(activeUser))
+          if(activeUser== userId){
+            console.log("user already has this projects as its active project")
+            return res.status(201).json({
+              message:"user already has this project as its active project"
+            })
+          }
+        }
+        Post.updateOne({"_id":projectId},{$push:{activeUsers:userId}}).then((result)=>{
+          return res.status(200).json({
+            message:'user added this project as active project'
+          })
+        }).catch(err=>{
+          console.log('error updating posts')
+        })
         
-      });
-      sensorData
-      .save()
-      .then((result)=>{
-        console.log(result)
-        res.status(200).json({message:'sensor data file succesfully addedd'});
-  
-      }).catch((err) => {
-        console.log(err)
+      }
+      
+    }).catch((err)=>{
+      console.log('signing in user 8....', err)
+      
+         res.status(400).json({
+        message:'login error !!!'
       })
+    })
+    
+      
 
   })
 module.exports = app;

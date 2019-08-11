@@ -36,7 +36,7 @@ const postSchema = mongoose.Schema({
   //   default:false
   // },
   sensorList:[String],
-  activeUsers:[Schema.Types.ObjectId]
+  activeUsers:[mongoose.Schema.Types.ObjectId]
 
 });
 
