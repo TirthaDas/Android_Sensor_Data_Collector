@@ -3,6 +3,9 @@
 const express = require('express');
 const bodyParser=require('body-parser');
 const Post = require('./models/post');
+const Question = require('./models/question');
+const Answer = require('./models/answer');
+
 const ActiveProject = require('./models/activeProject');
 
 const User = require('./models/user');
@@ -270,26 +273,54 @@ app.delete('/api/posts/:id',(req,res,next)=>{
           console.log("pst",post)
           const title=post.title;
           const content= post.content;
-          const newActiveProject=new ActiveProject({
-            title:title,
-            content:content,
-            sensorList:sensorList,
-            userId:userId,
-            projectId:projectId,
-            isCurrentlyActive:true
-          })
-          
-          console.log('new post added',post);
-          newActiveProject.save().then((createdActiveProject) => {
-            res.status(200).json({
-              message:'A New Active created sccessfuly',
-              _id:createdActiveProject._id
-            });
+          Question.find({"projectId":projectId})
+          .then((questions)=>{
+            if(!questions || questions.length==0){
+              const newActiveProject=new ActiveProject({
+                title:title,
+                content:content,
+                sensorList:sensorList,
+                userId:userId,
+                projectId:projectId,
+                isCurrentlyActive:true,
+                hasQuestions:false
+              })
+              console.log('new post added',post);
+              newActiveProject.save().then((createdActiveProject) => {
+              res.status(200).json({
+                message:'A New Active created sccessfuly',
+                _id:createdActiveProject._id
+              });
+              }).catch((err)=>{
+              console.log("3333",err);
+              })
+            }
+            else{
+              const newActiveProject=new ActiveProject({
+                title:title,
+                content:content,
+                sensorList:sensorList,
+                userId:userId,
+                projectId:projectId,
+                isCurrentlyActive:true,
+                hasQuestions:true
+
+              })
+              console.log('new post added',post);
+              newActiveProject.save().then((createdActiveProject) => {
+              res.status(200).json({
+                message:'A New Active created sccessfuly',
+                _id:createdActiveProject._id
+              });
+              }).catch((err)=>{
+              console.log("3333",err);
+              })
+            }
           }).catch((err)=>{
-            console.log("3333",err);
+            res.status(401).json({
+              message:"no such project exist"
+            })
           })
-
-
         }).catch((err)=>{
           res.status(401).json({
             message:"no such project exist"
@@ -318,8 +349,10 @@ app.delete('/api/posts/:id',(req,res,next)=>{
         message:' error finding active projects !!!'
       })
     })
-    
   })
+
+
+
 /*
   UPDATE ACTIVE PROJECTS STATUS
 */
@@ -376,4 +409,43 @@ app.post('/api/getAllActiveProjects',(req, res, next) => {
 
 });
 
+
+/*
+  GET QUESTIONS
+*/
+app.post('/api/getQestions',(req, res, next) => {
+  const projectId = req.body.projectId;
+  const userId = req.body.userId;
+
+  console.log('searching questions in db',req.body);
+  Answer.find({$and:[{"userId":userId},{"projectId":projectId}]})
+  .populate("questionId","question")
+  .then((answers)=>{
+    if(!answers || answers.length==0)
+    {
+      Question.find({"projectId":projectId}).then((questions) => {
+        res.status(200).json({
+          message:"questions found sucessfully",
+          questions:questions
+        })
+      })
+      .catch(()=>{
+        res.status(400).json({
+          message:"an error occured while fetching questions"
+        })
+      })
+      
+    }else{
+      res.status(200).json({
+        message:'answers found for this project',
+        answers:answers
+      })
+    }
+  }).catch((err)=>{
+    console.log(err)
+    res.status(400).json({
+      message:"an error occured"
+    })
+  })
+});
 module.exports = app;

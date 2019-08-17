@@ -16,6 +16,7 @@ const activeProjectSchema = mongoose.Schema({
     trim:true,
     default:true
   },
+  hasQuestions:{type:Boolean},
   userId: {type:mongoose.Schema.Types.ObjectId, ref:'User' } ,
   projectId:{type:mongoose.Schema.Types.ObjectId,ref:'Post'},
   isCurrentlyActive:{
