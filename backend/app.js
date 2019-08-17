@@ -3,6 +3,8 @@
 const express = require('express');
 const bodyParser=require('body-parser');
 const Post = require('./models/post');
+const ActiveProject = require('./models/activeProject');
+
 const User = require('./models/user');
 const SensorData = require('./models/sensorData');
 const multer = require('multer')
@@ -252,4 +254,126 @@ app.delete('/api/posts/:id',(req,res,next)=>{
       
 
   })
+/*
+  ADD A ACTIVE PROJECT
+*/
+  app.post("/api/addToActiveProjects",(req,res,next)=>{
+    const userId = req.body.userId;
+    const projectId = req.body.projectId;
+    const sensorList= req.body.sensorList;
+    console.log('add active project',userId,projectId,sensorList)  
+
+    ActiveProject.findOne({$and:[{"userId":userId},{"projectId":projectId}]}).then((activeProject)=>{
+      if(!activeProject || activeProject.length==0){
+        console.log("no active project found for this project")
+        Post.findOne({"_id":projectId}).then((post)=>{
+          console.log("pst",post)
+          const title=post.title;
+          const content= post.content;
+          const newActiveProject=new ActiveProject({
+            title:title,
+            content:content,
+            sensorList:sensorList,
+            userId:userId,
+            projectId:projectId,
+            isCurrentlyActive:true
+          })
+          
+          console.log('new post added',post);
+          newActiveProject.save().then((createdActiveProject) => {
+            res.status(200).json({
+              message:'A New Active created sccessfuly',
+              _id:createdActiveProject._id
+            });
+          }).catch((err)=>{
+            console.log("3333",err);
+          })
+
+
+        }).catch((err)=>{
+          res.status(401).json({
+            message:"no such project exist"
+          })
+        })
+        
+      }
+      else{
+        console.log("44444",activeProject.isCurrentlyActive)
+        const activeProjectId=activeProject._id
+        const isCurrentlyActive=activeProject.isCurrentlyActive
+        ActiveProject.update({"_id":activeProjectId},{$set:{isCurrentlyActive:true}}).then((result)=>{
+          res.status(201).json({
+            message:'this active project is updated',
+            
+          })
+        }).catch(err=>{
+          console.log(err)
+        })        
+        
+      }
+      
+    }).catch((err)=>{
+          console.log("5555555",err)
+         res.status(400).json({
+        message:' error finding active projects !!!'
+      })
+    })
+    
+  })
+/*
+  UPDATE ACTIVE PROJECTS STATUS
+*/
+app.post("/api/updateActiveProjectsStatus",(req,res,next)=>{
+  console.log("active project update call",req.body.activeProjectId)
+  const ActiveProjectId = req.body.activeProjectId;
+  ActiveProject.findOne({"_id":ActiveProjectId}).then((activeProject)=>{
+    if(!activeProject || activeProject.length==0){
+      res.status(400).json({
+        message:'no active project found with this id'
+      })
+      
+    }
+    else{
+      console.log("44444",activeProject.isCurrentlyActive)
+      const activeProjectId=activeProject._id
+      ActiveProject.update({"_id":ActiveProjectId},{$set:{isCurrentlyActive:false}}).then((result)=>{
+        res.status(201).json({
+          message:'this active project is updated',
+          
+        })
+      }).catch((err)=>{
+        console.log("err",err)
+      })        
+      
+    }
+    
+  }).catch((err)=>{
+        console.log("5555555",err)
+       res.status(400).json({
+      message:' error finding active projects !!!'
+    })
+  })
+  
+})
+
+
+  /*
+  GET ALL ACTIVE PROJECTS
+*/
+app.post('/api/getAllActiveProjects',(req, res, next) => {
+  const userId = req.body.userId;
+  console.log('active Projects searching in db',req.body);
+  
+  ActiveProject.find({"userId":userId}).then((activeProjects) => {
+    console.log('active Projects found in db',activeProjects);
+    res.status(200).json({
+      message:'Active Projects fetched succesfully',
+      activeProjects:activeProjects
+    });
+  }).catch((err) => {
+    console.log(err);
+  });
+
+});
+
 module.exports = app;
