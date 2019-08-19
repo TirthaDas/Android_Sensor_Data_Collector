@@ -448,4 +448,39 @@ app.post('/api/getQestions',(req, res, next) => {
     })
   })
 });
+
+
+/*
+  SAVE ANSWERS
+*/
+app.post('/api/saveAnswers',(req, res, next) => {
+  const projectId = req.body.ProjectId;
+  const userId = req.body.UserId;
+  const answers = JSON.parse(req.body.Answers)
+
+  console.log('saving answers  to  db',answers);
+
+  for(x=0;x<answers.length;x++){
+    const AnswerObj={
+      questionId:answers[x].QuestionId,
+      userId:answers[x].UserId,
+      projectId:answers[x].ProjectId,
+      answer:answers[x].Answer
+    }
+    Answer.findOneAndUpdate({$and:[{"questionId":answers[x].QuestionId},{"userId":answers[x].UserId}]},
+    {$set:AnswerObj},{upsert:true,useFindAndModify: false})
+    .then((result)=>{
+      console.log('result',result)
+      
+      
+    }).catch((err)=>{
+      console.log("e",err)
+      res.json({
+        message:"error saving answers",
+        err:err
+      })
+    })
+  }res.status(200).json({message:"successfully saved answers"}).end;
+  });
+
 module.exports = app;
