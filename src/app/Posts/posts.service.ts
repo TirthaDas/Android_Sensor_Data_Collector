@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { post } from './post.model';
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
@@ -9,7 +10,7 @@ export class PostsService {
   private posts: post[] = [] ;
   private postUpdated =new Subject<post[]>()
 
-constructor(private http:HttpClient){}
+constructor(private http:HttpClient , private router:Router){}
   getPosts(){
     this.http.get<{message:string,posts:any}>('http://localhost:3000/api/posts')
     .pipe(map((postData)=>{
@@ -43,6 +44,7 @@ constructor(private http:HttpClient){}
       post.id=id;
       this.posts.push(post)
       this.postUpdated.next([...this.posts])
+      this.router.navigate(["/"])
     })
 
   }
@@ -57,6 +59,8 @@ constructor(private http:HttpClient){}
         updatedPost[olpPostIndex]=post
         this.posts=updatedPost
         this.postUpdated.next([...this.posts]);
+        this.router.navigate(["/"])
+
     })
   }
 
