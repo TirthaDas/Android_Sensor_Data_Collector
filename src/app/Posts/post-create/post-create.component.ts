@@ -1,10 +1,15 @@
 import { Component, OnInit,EventEmitter,Output} from '@angular/core';
 // import {post} from '../post.model';
-import {NgForm} from "@angular/forms";
+import {NgForm,FormControl,Validators} from "@angular/forms";
 import { PostsService } from '../posts.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { ThrowStmt } from '@angular/compiler';
 import { post } from '../post.model';
+
+export interface SelectionType {
+  value: string;
+  viewValue: string;
+}
 @Component({
   selector: 'app-post-create',
   templateUrl: './post-create.component.html',
@@ -17,8 +22,17 @@ export class PostCreateComponent implements OnInit {
   private mode='create';
   private postId:string;
   post:post;
+  seletedFileType:string;
+  selectedSensor:string[];
 
- 
+  fileTypes: SelectionType[] = [
+    {value: 'Text File', viewValue: 'Text File'},
+    {value: 'CSV File', viewValue: 'CSV File'},
+  ];
+  fileType = new FormControl('', [Validators.required]);
+
+
+  sensorList: string[] = ['Accelerometer', 'Gyroscope', 'Magnetic_field', 'Ambient_temperature', 'ListenToLight', 'Gravity','Proximity','Game_rotation_vector'];
   
   // constructor
   constructor( public postService:PostsService, public route:ActivatedRoute) {  }
@@ -34,9 +48,17 @@ export class PostCreateComponent implements OnInit {
         console.log('before',this.post)
 
         this.postService.getPost(this.postId).subscribe((postData)=>{
-            this.post={id:postData._id,title:postData.title,content:postData.content}
-        })
+          console.log('*******',postData)
+            this.post={id:postData.posts._id,title:postData.posts.title,content:postData.posts.content,
+            fileType:postData.posts.fileType,sensorType:postData.posts.sensorList,
+          FirstQuestion:postData.questions[0]!=undefined?postData.questions[0].question:null,
+          SecondQuestion:postData.questions[1]!=undefined?postData.questions[1].question:null,
+          ThirdQuestion:postData.questions[2]!=undefined?postData.questions[2].question:null,
+          FourthQuestion:postData.questions[3]!=undefined?postData.questions[3].question:null,
+
+          FifthQuestion:postData.questions[4]!=undefined?postData.questions[4].question:null}
         console.log('after',this.post)
+        })
 
       }
       else{
@@ -46,18 +68,32 @@ export class PostCreateComponent implements OnInit {
         this.postId=null;
       } 
     })
+
+    // init multi select component
+    
+
   }
 
   //add post method
   onSavePost(form: NgForm){
+    console.log('recieved form', form.controls)
     if (form.invalid){
       return
     }
     if(this.mode==="create"){
-      this.postService.addPosts(form.value.title,form.value.content);
+      console.log("-----------")
+      
+      if((!form.controls.sensorType.value)&&(!form.controls.FirstQuestion.value&&!form.controls.SecondQuestion.value&&!form.controls.ThirdQuestion.value&&!form.controls.FourthQuestion.value&&!form.controls.FifthQuestion.value)){
+        console.log('**********')
+        alert("please either select a sensor from the dropdown or add some questions in the questionnaire")
+        return;
+      }
+      this.postService.addPosts(form.value.title,form.value.content,form.controls.fileType.value,form.controls.sensorType.value,form.controls.FirstQuestion.value,form.controls.SecondQuestion.value,form.controls.ThirdQuestion.value,form.controls.FourthQuestion.value,form.controls.FifthQuestion.value);
       form.resetForm()
     }
     else{
+      console.log("///////////////")
+      console.log("..............",form.value.title,form.value.content,this.post.fileType)
       this.postService.updatePost(this.postId,form.value.title,form.value.content);
     }
     
@@ -66,3 +102,6 @@ export class PostCreateComponent implements OnInit {
   
 
 }
+
+
+

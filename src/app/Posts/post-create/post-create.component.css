@@ -9,3 +9,43 @@
 mat-form-field, textarea{
   width: 100%;
 }
+.example-panel{
+  background: rgba(255, 0, 0, 0.5);
+}
+.secondCard{
+  margin-top: .5rem;
+  margin-bottom: 1rem;
+  background:#fbfafa;
+
+  
+}
+.firstCard{
+  background:#fbfafa;
+  margin-bottom: 1rem;
+
+}
+.thirdCard{
+  margin-top: .5rem;
+  margin-bottom: 1rem;
+
+}
+.mainForm{
+  margin-bottom: 2rem;
+  margin-top: .5rem;
+
+
+}
+.editModeViews{
+  margin-bottom: .5rem;
+  
+  
+
+}
+p{
+  margin-top: 2rem;
+  text-align: center
+  
+}
+h3{
+  text-align: center;
+}

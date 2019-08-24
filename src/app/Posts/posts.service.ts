@@ -33,15 +33,17 @@ constructor(private http:HttpClient , private router:Router){}
   return  this.postUpdated.asObservable()
   }
   getPost(id:string){
-    return this.http.get<{_id:string,title:string,content:string}>('http://localhost:3000/api/posts/'+ id);
+    return this.http.get<{_id:string,posts:{_id:string,title:string,content:string,sensorList:string[],fileType:string},
+    questions:[{question:string},{question:string},{question:string},{question:string},{question:string}]}>('http://localhost:3000/api/posts/'+ id);
   }
-  addPosts(title:string,content:string){
-    const post: post ={id:null,title:title,content:content};
+  addPosts(title:string,content:string,fileType:string,sensorType:string[],firstQuestion:string,secondQuestion:string,thirdQuestion:string,fourthQuestion:string,fifthQuesiton:string){
+    const post: post ={id:null,title:title,content:content,fileType:fileType,sensorType:sensorType,FirstQuestion:firstQuestion,SecondQuestion:secondQuestion,ThirdQuestion:thirdQuestion,FourthQuestion:fourthQuestion,FifthQuestion:fifthQuesiton};
     this.http.post<{message: string, postId:string}>('http://localhost:3000/api/posts',post)
     .subscribe((responseData)=>{
-      console.log(responseData);
+      console.log("llllllll",responseData);
       const id = responseData.postId;
       post.id=id;
+      console.log("oooooo",post,this.posts)
       this.posts.push(post)
       this.postUpdated.next([...this.posts])
       this.router.navigate(["/"])
@@ -50,13 +52,15 @@ constructor(private http:HttpClient , private router:Router){}
   }
 
   updatePost(id:string, title:string, content:string){
-    const post:post={id:id,title:title,content:content}
+    const post:post={id:id,title:title,content:content,fileType:"",sensorType:["sensorType"],FirstQuestion:"firstQuestion",SecondQuestion:"secondQuestion",ThirdQuestion:"thirdQuestion",FourthQuestion:"fourthQuestion",FifthQuestion:"fifthQuesiton"}
+    console.log("update called",post)
+
     this.http.put('http://localhost:3000/api/posts/'+ id,post)
     .subscribe(response=>{
         console.log("updated post",response )
         const updatedPost=[...this.posts]
-        const olpPostIndex=updatedPost.findIndex(p=>p.id===post.id)
-        updatedPost[olpPostIndex]=post
+        const oldPostIndex=updatedPost.findIndex(p=>p.id===post.id)
+        updatedPost[oldPostIndex]=post
         this.posts=updatedPost
         this.postUpdated.next([...this.posts]);
         this.router.navigate(["/"])
