@@ -25,7 +25,7 @@ export class PostCreateComponent implements OnInit {
   post:post;
   seletedDuration:string;
   selectedSensor:string[];
-
+  isloading=false
   durationsList: SelectionType[] = [
     {value: 'immediately', viewValue: 'immediately'},
     {value: 'twice a day', viewValue: 'twice a day'},
@@ -50,8 +50,9 @@ export class PostCreateComponent implements OnInit {
         this.postId=paramMap.get("postId");
         console.log('edit mode',this.postId,this.mode,paramMap.get("postId"))
         console.log('before',this.post)
-
+        this.isloading=true
         this.postService.getPost(this.postId).subscribe((postData)=>{
+          this.isloading=false
           console.log('*******77',postData)
             this.post={id:postData.posts._id,title:postData.posts.title,content:postData.posts.content,
               duration:postData.posts.duration,sensorType:postData.posts.sensorList,
@@ -84,6 +85,7 @@ export class PostCreateComponent implements OnInit {
     if (form.invalid){
       return
     }
+    this.isloading=true
     if(this.mode==="create"){
       console.log("-----------")
       

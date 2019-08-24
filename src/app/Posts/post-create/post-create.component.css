@@ -54,3 +54,7 @@ p{
 h5{
   text-align: center;
 }
+
+mat-spinner{
+  margin: auto
+}
