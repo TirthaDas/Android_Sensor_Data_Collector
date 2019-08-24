@@ -4,14 +4,17 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Subject} from 'rxjs';
 import {map} from 'rxjs/operators';
+import {MatSnackBar} from '@angular/material/snack-bar';
+
 @Injectable({providedIn:'root'})
 export class PostsService {
 
   private posts: post[] = [] ;
   private postUpdated =new Subject<post[]>()
 
-constructor(private http:HttpClient , private router:Router){}
-  getPosts(){
+constructor(private http:HttpClient , public router:Router,private _snackBar: MatSnackBar){}
+  
+getPosts(){
     this.http.get<{message:string,posts:any}>('http://localhost:3000/api/posts')
     .pipe(map((postData)=>{
       return postData.posts.map(post=>{
@@ -33,11 +36,11 @@ constructor(private http:HttpClient , private router:Router){}
   return  this.postUpdated.asObservable()
   }
   getPost(id:string){
-    return this.http.get<{_id:string,posts:{_id:string,title:string,content:string,sensorList:string[],fileType:string},
+    return this.http.get<{posts:{_id:string,title:string,content:string,sensorList:string[],duration:string},
     questions:[{question:string},{question:string},{question:string},{question:string},{question:string}]}>('http://localhost:3000/api/posts/'+ id);
   }
-  addPosts(title:string,content:string,fileType:string,sensorType:string[],firstQuestion:string,secondQuestion:string,thirdQuestion:string,fourthQuestion:string,fifthQuesiton:string){
-    const post: post ={id:null,title:title,content:content,fileType:fileType,sensorType:sensorType,FirstQuestion:firstQuestion,SecondQuestion:secondQuestion,ThirdQuestion:thirdQuestion,FourthQuestion:fourthQuestion,FifthQuestion:fifthQuesiton};
+  addPosts(title:string,content:string,duration:string,sensorType:string[],firstQuestion:string,secondQuestion:string,thirdQuestion:string,fourthQuestion:string,fifthQuesiton:string){
+    const post: post ={id:null,title:title,content:content,duration:duration,sensorType:sensorType,FirstQuestion:firstQuestion,SecondQuestion:secondQuestion,ThirdQuestion:thirdQuestion,FourthQuestion:fourthQuestion,FifthQuestion:fifthQuesiton};
     this.http.post<{message: string, postId:string}>('http://localhost:3000/api/posts',post)
     .subscribe((responseData)=>{
       console.log("llllllll",responseData);
@@ -47,12 +50,15 @@ constructor(private http:HttpClient , private router:Router){}
       this.posts.push(post)
       this.postUpdated.next([...this.posts])
       this.router.navigate(["/"])
+      .then(()=>{
+        this.openSnackBar("project created successfully","close")
+      })
     })
 
   }
 
   updatePost(id:string, title:string, content:string){
-    const post:post={id:id,title:title,content:content,fileType:"",sensorType:["sensorType"],FirstQuestion:"firstQuestion",SecondQuestion:"secondQuestion",ThirdQuestion:"thirdQuestion",FourthQuestion:"fourthQuestion",FifthQuestion:"fifthQuesiton"}
+    const post:post={id:id,title:title,content:content,duration:"",sensorType:["sensorType"],FirstQuestion:"firstQuestion",SecondQuestion:"secondQuestion",ThirdQuestion:"thirdQuestion",FourthQuestion:"fourthQuestion",FifthQuestion:"fifthQuesiton"}
     console.log("update called",post)
 
     this.http.put('http://localhost:3000/api/posts/'+ id,post)
@@ -64,6 +70,9 @@ constructor(private http:HttpClient , private router:Router){}
         this.posts=updatedPost
         this.postUpdated.next([...this.posts]);
         this.router.navigate(["/"])
+        .then(()=>{
+          this.openSnackBar("project updated successfully","close")
+        })
 
     })
   }
@@ -77,6 +86,13 @@ constructor(private http:HttpClient , private router:Router){}
       )
       this.posts=updatedPost;
       this.postUpdated.next([...this.posts])
+      this.openSnackBar("project deleted successfully","close")
     })
   }
+  openSnackBar(message: string, action: string) {
+    this._snackBar.open(message, action, {
+      duration: 2000,
+    });
+  }
+  
 }

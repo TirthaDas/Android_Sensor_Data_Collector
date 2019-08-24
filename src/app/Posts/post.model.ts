@@ -2,7 +2,7 @@ export interface post{
   id:string;
   title:string;
   content:string;
-  fileType:string;
+  duration:string;
   sensorType:string[];
   FirstQuestion:string;
   SecondQuestion:string;

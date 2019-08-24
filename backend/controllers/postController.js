@@ -28,7 +28,7 @@ exports.createPost=(req,res,next)=>{
       title:req.body.title,
       content:req.body.content,
       activeUser:[],
-      fileType:req.body.fileType,
+      duration:req.body.duration,
       sensorList:req.body.sensorType
     });
     
@@ -80,7 +80,7 @@ exports.updatePost=(req,res,next)=>{
       title:req.body.title,
       content:req.body.content
     });
-    Post.updateOne({"_id":req.params.id},newPost)
+    Post.findOneAndUpdate({"_id":req.params.id},{$set:{title:req.body.title,content:req.body.content}},{useFindAndModify: false})
     .then((post)=>{
       console.log(post)
       res.status(200).json({
@@ -118,12 +118,17 @@ exports.getAllPosts=(req, res, next) => {
 exports.getPostById=(req,res,next)=>{
     Post.findById(req.params.id).then((post)=>{
       if(post){
+        console.log('.,.,.,.,.,',post)
         Question.find({projectId:req.params.id}).then((questions)=>{
           if(!questions || questions.length==0){
-            res.status(200).json(post)
+        console.log('.,.,.,.,.,1',post)
+
+            res.status(200).json({posts:post,questions:questions})
 
           }
           else{
+        console.log('.,.,.,.,.,2',post)
+
             res.status(200).json({
               posts:post,
               questions:questions

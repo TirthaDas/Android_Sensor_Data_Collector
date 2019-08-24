@@ -20,6 +20,7 @@ private postSub :Subscription;
     this.postService.getPosts()
     this.postSub=this.postService.getPostUpdateListener().subscribe((posts:post[])=>{
       this.posts=posts;
+
     })
   }
   onDelete(postId:string){
@@ -28,5 +29,6 @@ private postSub :Subscription;
   ngOnDestroy(){
     this.postSub.unsubscribe()
   }
+  
 
 }

@@ -4,12 +4,14 @@ import { NgModule } from '@angular/core';
 import {FormsModule,ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+// import {MatSnackBar} from '@angular/material/snack-bar';
 import {
   MatInputModule,
   MatCardModule,
   MatButtonModule,
   MatToolbarModule,
   MatExpansionModule,
+  MatSnackBarModule
   
 } from '@angular/material';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
@@ -39,7 +41,8 @@ import { PostListComponent } from './Posts/post-list/post-list.component'
     HttpClientModule,
     NgMultiSelectDropDownModule.forRoot(),
     MatSelectModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatSnackBarModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -13,7 +13,7 @@ const postSchema = mongoose.Schema({
   },
   sensorList:[String],
   activeUsers:[mongoose.Schema.Types.ObjectId],
-  fileType:String
+  duration:String
 
 });
 
