@@ -16,7 +16,6 @@ import {
   MatProgressSpinnerModule
   
 } from '@angular/material';
-import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
 import {MatSelectModule} from '@angular/material/select';
 import { AppComponent } from './app.component';
@@ -45,7 +44,6 @@ import { SignupComponent } from './auth/signup/signup.component'
     MatToolbarModule,
     MatExpansionModule,
     HttpClientModule,
-    NgMultiSelectDropDownModule.forRoot(),
     MatSelectModule,
     ReactiveFormsModule,
     MatSnackBarModule,

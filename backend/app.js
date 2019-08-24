@@ -8,6 +8,8 @@ const mongoose = require('mongoose');
 // get the routes
 const UserRoutes=require('./routes/users')
 const PostRoutes=require('./routes/posts')
+const AdminRoutes=require('./routes/admins')
+
 
 // set up express app
 const app = express();
@@ -34,6 +36,6 @@ app.use((req,res,next)=>{
 
 
 
-app.use([UserRoutes,PostRoutes])
+app.use([UserRoutes,PostRoutes,AdminRoutes])
 
 module.exports = app;

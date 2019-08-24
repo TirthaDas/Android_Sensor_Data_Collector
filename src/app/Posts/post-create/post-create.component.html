@@ -10,8 +10,8 @@
     </mat-form-field>
     <mat-form-field>
       <textarea matInput rows="3" name="content" [ngModel]="post?.content" placeholder="enter a project description" required
-        minlength='5' #content="ngModel"></textarea>
-      <mat-error *ngIf="content.invalid">please enter a project description</mat-error>
+         #content="ngModel"></textarea>
+      <mat-error *ngIf="content.invalid">please enter a project description </mat-error>
     </mat-form-field>
     <mat-form-field *ngIf="mode==='create'">
       <mat-label>select Data upload frequency</mat-label>
