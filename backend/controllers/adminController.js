@@ -18,7 +18,7 @@ exports.signup=(req,res,next)=>{
                 admin:result
             })
         }).catch((err)=>{
-            res.json(500).json({
+            res.status(500).json({
                 message:err
             })
         })

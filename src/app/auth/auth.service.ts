@@ -36,11 +36,18 @@ export class AuthService {
         .subscribe(response=>{
             console.log(response)
             if(response){
+                console.log(".....",response)
                 this.login(email,password);
 
             }
 
+        },(err)=>{
+            this.authStatusListener.next(false);
+            console.log('snk bar err',err)
+            this.openSnackBar("signup error", "close")
+
         })
+        
     }
 
     login(email:string, password:string){
@@ -64,6 +71,10 @@ export class AuthService {
                 this.Router.navigate(['/']);
             }
             
+        },(err)=>{
+            console.log('snk bar err',err)
+            this.authStatusListener.next(false);
+            this.openSnackBar("email or password is incorrect", "close")
         })
 
     }
@@ -112,6 +123,7 @@ export class AuthService {
         this.userId=null;
         this.clearAuthData()
         this.Router.navigate(['/']);
+        this.openSnackBar("logged out successfully","close")
 
     }
 

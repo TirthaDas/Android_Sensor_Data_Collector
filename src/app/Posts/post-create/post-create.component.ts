@@ -1,4 +1,6 @@
-import { Component, OnInit,EventEmitter,Output} from '@angular/core';
+import { AuthService } from './../../auth/auth.service';
+import { Subscription } from 'rxjs';
+import { Component, OnInit,EventEmitter,Output, OnDestroy} from '@angular/core';
 // import {post} from '../post.model';
 import {NgForm,FormControl,Validators} from "@angular/forms";
 import { PostsService } from '../posts.service';
@@ -16,12 +18,13 @@ export interface SelectionType {
   templateUrl: './post-create.component.html',
   styleUrls: ['./post-create.component.css']
 })
-export class PostCreateComponent implements OnInit {
+export class PostCreateComponent implements OnInit,OnDestroy {
 
   //class properties
   newPost='NO CONTENT'
   private mode='create';
   private postId:string;
+  private authStatusSub:Subscription
   post:post;
   seletedDuration:string;
   selectedSensor:string[];
@@ -39,11 +42,14 @@ export class PostCreateComponent implements OnInit {
   sensorList: string[] = ['accelerometer', 'gyroscope', 'magnetic_field', 'ambient_temperature', 'light', 'gravity','proximity','game_rotation_vector'];
   
   // constructor
-  constructor( public postService:PostsService, public route:ActivatedRoute) {  }
+  constructor( public postService:PostsService, public route:ActivatedRoute, private AuthService:AuthService) {  }
   
 
   // on Init
   ngOnInit() {
+    this.authStatusSub=this.AuthService.getauthStatusListener().subscribe(()=>{
+      this.isloading=false
+    })
     this.route.paramMap.subscribe((paramMap: ParamMap)=>{
       if(paramMap.has("postId")){
         this.mode='edit';
@@ -107,7 +113,9 @@ export class PostCreateComponent implements OnInit {
     
   }
   
-
+ngOnDestroy(){
+  this.authStatusSub.unsubscribe();
+}
 }
 
 

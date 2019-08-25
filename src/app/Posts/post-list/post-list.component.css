@@ -13,3 +13,20 @@ mat-paginator{
 mat-spinner{
   margin: auto
 }
+.headline{
+  font-size: 2rem;
+  color: #34465d;
+  text-align: center;
+
+  /* background-color: aqua */
+
+}
+.subtitle{
+  font-size: 1.1rem;
+  text-align: center;
+  margin-bottom: 3rem;
+  /* color: #00AFF0; */
+  color: #4c75a3;
+
+
+}

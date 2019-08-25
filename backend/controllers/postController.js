@@ -75,16 +75,17 @@ exports.createPost = (req, res, next) => {
      UPDATE A POST 
 */
 exports.updatePost = (req, res, next) => {
-  console.log(req.params.id);
+  console.log('here',req.params.id,req.userData.userId);
   const newPost = new Post({
     _id: req.body.id,
     title: req.body.title,
     content: req.body.content,
     creator:req.userData.userId
   });
-  Post.findOneAndUpdate({ "_id": req.params.id,'creator':req.userData.userId }, { $set: { title: req.body.title, content: req.body.content } }, { useFindAndModify: false })
+  Post.updateOne({ "_id": req.params.id,'creator':req.userData.userId }, { $set: { title: req.body.title, content: req.body.content } })
     .then((post) => {
-      if(post.nModified>0){
+      console.log('post',post)
+      if(post.n>0){
         res.status(200).json({
           message: 'post updated successfully'
         })

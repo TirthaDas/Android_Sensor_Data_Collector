@@ -66,6 +66,10 @@ private postSub :Subscription;
       this.isloading=false
       this.postService.openSnackBar("project deleted successfully", "close")
       this.postService.getPosts(this.postsPerPage,this.currentPage)
+    },(err)=>{
+      this.isloading=false
+      this.postService.openSnackBar("project could not be deleted", "close")
+
     })
   }
   ngOnDestroy(){
