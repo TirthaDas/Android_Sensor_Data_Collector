@@ -1,14 +1,13 @@
 <mat-spinner *ngIf="isloading"></mat-spinner>
 <mat-accordion multi="true" *ngIf="posts.length>0 && !isloading">
     <mat-card *ngIf="!userIsAuthenticated"><p class=" info-text mat-body-1 subtitle">
-        please login to start collecting sensor data  
+        ALL  &nbsp; &nbsp;  PROJECTS <br>
+          
       </p>
     </mat-card>
-    <!-- <mat-card> -->
         <p class="info-text mat-body-1">
-            ALL  &nbsp; &nbsp;  PROJECTS <br>
+            PLEASE LOGIN TO CREATE/EDIT PROJECTS
           </p>
-    <!-- </mat-card> -->
   
   
   <mat-expansion-panel *ngFor="let post of posts">

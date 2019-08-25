@@ -4,17 +4,17 @@
   <mat-card class="firstCard">
 
     <mat-form-field>
-      <input matInput type="text" name="title" [ngModel]="post?.title" placeholder="enter a project title" required
+      <input matInput type="text" name="title" [ngModel]="post?.title" placeholder="Enter a project title" required
         minlength="3" #title="ngModel">
       <mat-error *ngIf="title.invalid">please enter a projectt title</mat-error>
     </mat-form-field>
     <mat-form-field>
-      <textarea matInput rows="3" name="content" [ngModel]="post?.content" placeholder="enter a project description" required
+      <textarea matInput rows="3" name="content" [ngModel]="post?.content" placeholder="Enter a project description" required
          #content="ngModel"></textarea>
       <mat-error *ngIf="content.invalid">please enter a project description </mat-error>
     </mat-form-field>
     <mat-form-field *ngIf="mode==='create'">
-      <mat-label>select Data upload frequency</mat-label>
+      <mat-label>Select data upload frequency</mat-label>
       <mat-select name="duration" required [(ngModel)]="seletedDuration">
         <mat-option *ngFor="let duration of durationsList" [value]="duration.value">
           {{duration.viewValue}}
@@ -25,7 +25,7 @@
     </mat-form-field>
 
     <mat-form-field *ngIf="mode==='create'">
-      <mat-label>select required sensors</mat-label>
+      <mat-label>Select required sensors</mat-label>
       <mat-select name="sensorType" multiple class="SensorList" [(ngModel)]="selectedSensor">
         <mat-option *ngFor="let sensor of sensorList" [value]="sensor">{{sensor}}</mat-option>
       </mat-select>
@@ -34,7 +34,7 @@
 
   </mat-card>
   <!-- <mat-label >  -->
-  <p class="info-text mat-body-1" *ngIf="mode=='create'"> Add additonal questions to this project</p>
+  <p class="info-text mat-body-1" *ngIf="mode=='create'"> ADD SOME ADDITIONAL QUESTIONS TO THIS PROJECT</p>
   <!-- </mat-label> -->
   <mat-accordion *ngIf="mode==='create'">
       <mat-expansion-panel class="editModeViews">
@@ -157,7 +157,7 @@
     <mat-expansion-panel class="editModeViews">
       <mat-expansion-panel-header>
         <mat-panel-title>
-          what type of sensor data are you collecting?
+          What type of sensor data are you collecting?
         </mat-panel-title>
       </mat-expansion-panel-header>
       <mat-panel-description *ngFor="let sensor of post?.sensorType">
@@ -174,7 +174,7 @@
     <mat-expansion-panel class="editModeViews">
       <mat-expansion-panel-header>
         <mat-panel-title>
-          list of additional questions in this project?
+          List of additional questions in this project?
         </mat-panel-title>
       </mat-expansion-panel-header>
       <mat-panel-description *ngIf="post?.FirstQuestion">
