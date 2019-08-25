@@ -173,7 +173,7 @@ exports.deletePost = (req, res, next) => {
   console.log(req.params.id);
   Post.deleteOne({ _id: req.params.id ,creator:req.userData.userId}).then((result) => {
     console.log(result)
-    if(post.n>0){
+    if(result.n>0){
       Question.deleteMany({ projectId: req.params.id }).then(() => {
         res.status(200).json({ message: 'post and questions succesfully deleted' });
   

@@ -62,11 +62,13 @@ private postSub :Subscription;
         this.currentPage -= 1;
       }
     this.isloading=true
-    this.postService.deletePost(postId).subscribe(()=>{
+    this.postService.deletePost(postId).subscribe((result)=>{
+      console.log('snk bar rslt on delt', result)
       this.isloading=false
       this.postService.openSnackBar("project deleted successfully", "close")
       this.postService.getPosts(this.postsPerPage,this.currentPage)
     },(err)=>{
+      console.log('snk bar err on del',err)
       this.isloading=false
       this.postService.openSnackBar("project could not be deleted", "close")
 
