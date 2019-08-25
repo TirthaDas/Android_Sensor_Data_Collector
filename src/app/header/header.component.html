@@ -4,21 +4,26 @@
     </span>
     <span class="spacer"></span>
     <ul>
-        <li>
+        <li *ngIf="userIsAuthenticated">
             <a mat-button routerLink="/create" routerLinkActive="mat-warn" routerLinkInactive="mat-button">Create
                 Project</a>
 
         </li>
-        <li>
+        <li *ngIf="!userIsAuthenticated">
             <a mat-button routerLink="/login" routerLinkActive="mat-warn" routerLinkInactive="mat-button">Login
-        </a>
+            </a>
 
         </li>
-        <li>
+        <li *ngIf="!userIsAuthenticated">
             <a mat-button routerLink="/signup" routerLinkActive="mat-warn" routerLinkInactive="mat-button">Sign Up
             </a>
-    
-            </li>
+
+        </li>
+        <li *ngIf="userIsAuthenticated">
+            <button mat-button>Logout </button>
+
+        </li>
+
     </ul>
 
 </mat-toolbar>

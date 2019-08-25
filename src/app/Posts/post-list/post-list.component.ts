@@ -1,3 +1,4 @@
+import { AuthService } from './../../auth/auth.service';
 import { Component, OnInit,Input,OnDestroy } from '@angular/core';
 import  {Subscription} from 'rxjs'
 import {post} from '../post.model';
@@ -19,7 +20,8 @@ isloading=false
 
 private postSub :Subscription;
 // postService:PostsService;
-  constructor( public postService : PostsService) {
+  private authStatusSubs:Subscription
+  constructor( public postService : PostsService, private AuthService:AuthService) {
     // this.postService=postService
   }
 
@@ -30,6 +32,9 @@ private postSub :Subscription;
       this.isloading=false
       this.posts=postData.posts;
       this.totalPosts=postData.postCount
+    })
+    this.authStatusSubs=this.AuthService.getauthStatusListener().subscribe(isAuthenticated=>{
+
     })
   }
   onChangedPage(pageData:PageEvent){
@@ -54,6 +59,7 @@ private postSub :Subscription;
   }
   ngOnDestroy(){
     this.postSub.unsubscribe()
+    this.authStatusSubs.unsubscribe()
   }
   
 
