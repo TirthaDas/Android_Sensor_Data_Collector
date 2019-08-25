@@ -5,10 +5,13 @@ import { Constants } from "../constants";
 
 @Injectable({providedIn:"root"})
 export class AuthService {
+    private token:string;
     homeurl=Constants.HOME_URL;
     constructor(private http:HttpClient){}
 
-
+    getToken(){
+        return this.token;
+    }
     createAdmin(email:string, password:string){
         const authData:AuthData={email:email,password:password}
         this.http.post(this.homeurl+'admin/signup',authData)
@@ -19,9 +22,11 @@ export class AuthService {
 
     login(email:string, password:string){
         const authData:AuthData={email:email,password:password}
-        this.http.post(this.homeurl+'admin/login',authData)
+        this.http.post<{token:string}>(this.homeurl+'admin/login',authData)
         .subscribe((response)=>{
             console.log(response)
+            const token=response.token; 
+            this.token=token;
         })
 
     }
