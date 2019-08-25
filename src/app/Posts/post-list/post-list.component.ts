@@ -17,7 +17,7 @@ postsPerPage=3
 currentPage=1
 pageSizeOptions=[1,2,3, 5,10]
 isloading=false
-
+userIsAuthenticated=false
 private postSub :Subscription;
 // postService:PostsService;
   private authStatusSubs:Subscription
@@ -33,8 +33,9 @@ private postSub :Subscription;
       this.posts=postData.posts;
       this.totalPosts=postData.postCount
     })
+    this.userIsAuthenticated=this.AuthService.getIsAuth()
     this.authStatusSubs=this.AuthService.getauthStatusListener().subscribe(isAuthenticated=>{
-
+       this.userIsAuthenticated=isAuthenticated;
     })
   }
   onChangedPage(pageData:PageEvent){
