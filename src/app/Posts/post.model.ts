@@ -9,5 +9,6 @@ export interface post{
   ThirdQuestion:string;
   FourthQuestion:string;
   FifthQuestion:string;
+  creator:string
 
 }

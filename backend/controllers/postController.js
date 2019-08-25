@@ -21,7 +21,7 @@ exports.createPost = (req, res, next) => {
     questionArray.push(req.body.FifthQuestion)
   }
 
-  console.log('POST ARRIVED', req.body)
+  console.log('POST ARRIVED', req.body,req.userData.userId)
   console.log('questions ARRIVED', questionArray)
 
   const post = new Post({
@@ -29,7 +29,8 @@ exports.createPost = (req, res, next) => {
     content: req.body.content,
     activeUser: [],
     duration: req.body.duration,
-    sensorList: req.body.sensorType
+    sensorList: req.body.sensorType,
+    creator:req.userData.userId
   });
 
   console.log('new post added', post);
@@ -78,14 +79,22 @@ exports.updatePost = (req, res, next) => {
   const newPost = new Post({
     _id: req.body.id,
     title: req.body.title,
-    content: req.body.content
+    content: req.body.content,
+    creator:req.userData.userId
   });
-  Post.findOneAndUpdate({ "_id": req.params.id }, { $set: { title: req.body.title, content: req.body.content } }, { useFindAndModify: false })
+  Post.findOneAndUpdate({ "_id": req.params.id,'creator':req.userData.userId }, { $set: { title: req.body.title, content: req.body.content } }, { useFindAndModify: false })
     .then((post) => {
-      console.log(post)
-      res.status(200).json({
-        message: 'post updated successfully'
-      })
+      if(post.nModified>0){
+        res.status(200).json({
+          message: 'post updated successfully'
+        })
+      }
+      else{
+        res.status(401).json({
+          message: 'not authorized'
+        })
+      }
+      
     })
     .catch(err => {
       console.log(err)
@@ -161,18 +170,25 @@ exports.getPostById = (req, res, next) => {
 */
 exports.deletePost = (req, res, next) => {
   console.log(req.params.id);
-  Post.deleteOne({ _id: req.params.id }).then((result) => {
+  Post.deleteOne({ _id: req.params.id ,creator:req.userData.userId}).then((result) => {
     console.log(result)
-
-    Question.deleteMany({ projectId: req.params.id }).then(() => {
-      res.status(200).json({ message: 'post and questions succesfully deleted' });
-
-    })
-      .catch(() => {
-        res.status(400).json({
-          message: 'error deleting post'
-        })
+    if(post.n>0){
+      Question.deleteMany({ projectId: req.params.id }).then(() => {
+        res.status(200).json({ message: 'post and questions succesfully deleted' });
+  
       })
+        .catch(() => {
+          res.status(400).json({
+            message: 'error deleting post'
+          })
+        })
+    }
+    else{
+      res.status(401).json({
+        message: 'not authorized'
+      })
+    }
+    
 
   }).catch((err) => {
     console.log(err)

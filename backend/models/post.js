@@ -13,7 +13,8 @@ const postSchema = mongoose.Schema({
   },
   sensorList:[String],
   activeUsers:[mongoose.Schema.Types.ObjectId],
-  duration:String
+  duration:String,
+  creator:{type:mongoose.Schema.Types.ObjectId,ref:'Admin'}
 
 });
 

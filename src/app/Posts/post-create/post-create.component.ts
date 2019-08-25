@@ -36,7 +36,7 @@ export class PostCreateComponent implements OnInit {
   duration = new FormControl('', [Validators.required]);
   FourthQuestion="no";
 
-  sensorList: string[] = ['Accelerometer', 'Gyroscope', 'Magnetic_field', 'Ambient_temperature', 'ListenToLight', 'Gravity','Proximity','Game_rotation_vector'];
+  sensorList: string[] = ['accelerometer', 'gyroscope', 'magnetic_field', 'ambient_temperature', 'light', 'gravity','proximity','game_rotation_vector'];
   
   // constructor
   constructor( public postService:PostsService, public route:ActivatedRoute) {  }
@@ -61,7 +61,8 @@ export class PostCreateComponent implements OnInit {
           ThirdQuestion:postData.questions[2]!=undefined?postData.questions[2].question:null,
           FourthQuestion:postData.questions[3]!=undefined?postData.questions[3].question:null,
 
-          FifthQuestion:postData.questions[4]!=undefined?postData.questions[4].question:null}
+          FifthQuestion:postData.questions[4]!=undefined?postData.questions[4].question:null,
+          creator:postData.creator}
         console.log('after',this.post)
         })
 

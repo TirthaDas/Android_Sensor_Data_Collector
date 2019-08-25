@@ -23,7 +23,9 @@ export class PostsService {
             return {
               id: post._id,
               title: post.title,
-              content: post.content
+              content: post.content,
+              creator:post.creator
+
             };
           }),
           maxPosts: postData.maxPosts
@@ -45,11 +47,11 @@ export class PostsService {
   getPost(id: string) {
     return this.http.get<{
       posts: { _id: string, title: string, content: string, sensorList: string[], duration: string },
-      questions: [{ question: string }, { question: string }, { question: string }, { question: string }, { question: string }]
+      questions: [{ question: string }, { question: string }, { question: string }, { question: string }, { question: string }],creator:string
     }>('http://localhost:3000/api/posts/' + id);
   }
   addPosts(title: string, content: string, duration: string, sensorType: string[], firstQuestion: string, secondQuestion: string, thirdQuestion: string, fourthQuestion: string, fifthQuesiton: string) {
-    const post: post = { id: null, title: title, content: content, duration: duration, sensorType: sensorType, FirstQuestion: firstQuestion, SecondQuestion: secondQuestion, ThirdQuestion: thirdQuestion, FourthQuestion: fourthQuestion, FifthQuestion: fifthQuesiton };
+    const post: post = { id: null, title: title, content: content, duration: duration, sensorType: sensorType, FirstQuestion: firstQuestion, SecondQuestion: secondQuestion, ThirdQuestion: thirdQuestion, FourthQuestion: fourthQuestion, FifthQuestion: fifthQuesiton,creator:null };
     this.http.post<{ message: string, postId: string }>('http://localhost:3000/api/posts', post)
       .subscribe((responseData) => {
         this.router.navigate(["/"])
@@ -61,7 +63,7 @@ export class PostsService {
   }
 
   updatePost(id: string, title: string, content: string) {
-    const post: post = { id: id, title: title, content: content, duration: "", sensorType: ["sensorType"], FirstQuestion: "firstQuestion", SecondQuestion: "secondQuestion", ThirdQuestion: "thirdQuestion", FourthQuestion: "fourthQuestion", FifthQuestion: "fifthQuesiton" }
+    const post: post = { id: id, title: title, content: content, duration: "", sensorType: ["sensorType"], FirstQuestion: "firstQuestion", SecondQuestion: "secondQuestion", ThirdQuestion: "thirdQuestion", FourthQuestion: "fourthQuestion", FifthQuestion: "fifthQuesiton" , creator:null}
     console.log("update called", post)
 
     this.http.put('http://localhost:3000/api/posts/' + id, post)
