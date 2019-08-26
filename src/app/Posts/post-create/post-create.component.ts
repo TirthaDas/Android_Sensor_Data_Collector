@@ -39,7 +39,7 @@ export class PostCreateComponent implements OnInit,OnDestroy {
   duration = new FormControl('', [Validators.required]);
   FourthQuestion="no";
 
-  sensorList: string[] = ['accelerometer', 'gyroscope', 'magnetic_field', 'ambient_temperature', 'light', 'gravity','proximity','game_rotation_vector'];
+  sensorList: string[] = ['accelerometer', 'gyroscope', 'magnetic', 'temperature', 'light', 'gravity','proximity','rotation'];
   
   // constructor
   constructor( public postService:PostsService, public route:ActivatedRoute, private AuthService:AuthService) {  }

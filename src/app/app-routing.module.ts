@@ -5,6 +5,7 @@ import { PostListComponent } from './Posts/post-list/post-list.component';
 import { PostCreateComponent } from './Posts/post-create/post-create.component';
 import { LoginComponent } from './auth/login/login.component';
 import { SignupComponent } from './auth/signup/signup.component';
+import { SensordataComponent } from './sensordata/sensordata.component';
 
 const route:Routes=[
     {path:'',component:PostListComponent},
@@ -12,6 +13,8 @@ const route:Routes=[
     {path:'edit/:postId',component:PostCreateComponent,canActivate:[AuthGuard]},
     {path:'login',component:LoginComponent},
     {path:'signup',component:SignupComponent},
+    {path:'sensordata/:postId',component:SensordataComponent,canActivate:[AuthGuard]},
+
 
 
 

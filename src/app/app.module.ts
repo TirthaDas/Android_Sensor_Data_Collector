@@ -24,7 +24,8 @@ import { PostCreateComponent } from './Posts/post-create/post-create.component';
 import { HeaderComponent } from './header/header.component';
 import { PostListComponent } from './Posts/post-list/post-list.component';
 import { LoginComponent } from './auth/login/login.component'
-import { SignupComponent } from './auth/signup/signup.component'
+import { SignupComponent } from './auth/signup/signup.component';
+import { SensordataComponent } from './sensordata/sensordata.component'
 @NgModule({
   declarations: [
     AppComponent,
@@ -32,7 +33,8 @@ import { SignupComponent } from './auth/signup/signup.component'
     HeaderComponent,
     PostListComponent,
     LoginComponent,
-    SignupComponent
+    SignupComponent,
+    SensordataComponent
   ],
   imports: [
     BrowserModule,

@@ -20,6 +20,7 @@ export class PostsService {
       .pipe(map((postData) => {
         return {
           posts: postData.posts.map(post => {
+            console.log('post0000',post)
             return {
               id: post._id,
               title: post.title,
