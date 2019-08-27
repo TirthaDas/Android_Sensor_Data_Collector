@@ -1,1 +1,39 @@
-<p>answers works!</p>
+
+
+ <mat-spinner *ngIf="isloading"></mat-spinner>
+ 
+ <div style="text-align: center"> 
+<mat-card >
+    <p class=" info-text mat-body-1">
+    ALL &nbsp; ANSWERS 
+</p></mat-card>
+
+ </div>
+ <mat-accordion *ngIf="answerdata.length>0 && !isloading" multi="true">
+        <mat-expansion-panel *ngFor="let data of answerdata" style="margin-bottom: .5rem" >
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                      <div>
+                        {{data.questionId.question}}
+                      </div>
+                  </mat-panel-title>
+                  <!-- <mat-panel-description>
+                    Type your name and age
+                  </mat-panel-description> -->
+                </mat-expansion-panel-header>
+                <p>{{data.answer}}</p>
+                
+                </mat-expansion-panel>
+ </mat-accordion>
+    
+<mat-paginator *ngIf="answerdata.length>0" [length]="totalData" [pageSize]="postsPerPage" [pageSizeOptions]="pageSizeOptions" (page)="onChangedPage($event)" [pageIndex]="currentPage-1">
+
+    </mat-paginator>
+
+
+
+
+<div style="text-align: center" *ngIf="answerdata.length==0 && !isloading"> 
+        <h4>NO ANSWER DATA AVAILABLE YET FOR THIS PROJECT</h4>
+       
+</div>

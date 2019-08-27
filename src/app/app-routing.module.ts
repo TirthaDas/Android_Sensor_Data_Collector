@@ -1,3 +1,4 @@
+import { AnswersComponent } from './answers/answers.component';
 import { AuthGuard } from './auth/auth.gaurd';
 import {NgModule} from "@angular/core"; 
 import {RouterModule,Routes} from"@angular/router";
@@ -14,6 +15,8 @@ const route:Routes=[
     {path:'login',component:LoginComponent},
     {path:'signup',component:SignupComponent},
     {path:'sensordata/:postId',component:SensordataComponent,canActivate:[AuthGuard]},
+    {path:'answerdata/:postId',component:AnswersComponent,canActivate:[AuthGuard]},
+
 
 
 

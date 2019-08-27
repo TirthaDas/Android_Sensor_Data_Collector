@@ -1,4 +1,3 @@
-import { Message } from '@angular/compiler/src/i18n/i18n_ast';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -75,7 +74,19 @@ export class SensorDataService {
 
         });
     // }
-      }
+      },
+      (err)=>{
+        console.log('what is the error',err)
+        if(err.error.message==="not authorized"){
+            this.sensorDataUpdated.next({
+                sensorData:[...this.sensordata],
+                sensorDataCount:0,
+                message:"not authorized"
+                
+    
+            });
+        }
+    }
     //   ,err=>{
     //       console.log('e222',err.error.message)
     //     //   this.sensorDataUpdated.error({

@@ -5,6 +5,7 @@ const SensorData = require('../models/sensorData')
 const Answer = require('../models/answer')
 const Post = require('../models/post')
 var path = require('path')
+const Question =require('../models/question')
 /*
 create an admin account
 */
@@ -72,7 +73,6 @@ exports.login = (req, res, next) => {
 
 exports.getSensorData = (req, res, nex) => {
     const projectId = req.params.id;
-    console.log('oooo', projectId)
     const pageSize = +req.query.pagesize;
     const currentPage = +req.query.page;
     let fetchedData;
@@ -171,6 +171,75 @@ exports.downloadData=(req,res,next)=>{
 
 }
 
+
+exports.getQuestionAnswers = (req, res, nex) => {
+    const projectId = req.params.id;
+    const pageSize = +req.query.pagesize;
+    const currentPage = +req.query.page;
+    let fetchedQuestions;
+    let fetchedAnswers;
+    console.log('all data recvd',projectId,req.userData.userId,pageSize,currentPage)
+    let totalAnswers = 0
+    const AnswerDataQuery = Answer.find({ 'projectId': projectId })
+    if (pageSize && currentPage) {
+        AnswerDataQuery.skip(pageSize * (currentPage - 1))
+            .limit(pageSize)
+    }
+    Question.find({ 'projectId': projectId }).then(resl => {
+        console.log('kk',resl)
+        if (resl.length === 0) {
+            res.status(201).json({
+                message: 'no question was asked in this project',
+                Answers: [],
+                AnswersCount: totalAnswers,
+            })
+        }
+        else {
+            Question.find({ 'projectId': projectId }).count().then((dt) => {
+                totalAnswers = dt
+                console.log('dt',dt)
+                AnswerDataQuery.sort({'userId': 1}).populate('userId').populate('projectId').populate('questionId').then((data) => {
+                    console.log('data',data)
+                    if (!data || data.length == 0) {
+                        return res.status(201).json({
+                            message: 'no answer data available yet',
+                            Answers: [],
+                            AnswersCount: totalAnswers,
+                        }).end()
+                    }
+                    if (data[0].projectId.creator != req.userData.userId) {
+                        return res.status(200).json({
+                            message: 'not authorized',
+                            Answers: [],
+                            AnswersCount: 0
+                        }).end()
+                    }
+                    else {
+                        fetchedAnswers = data
+                        res.status(200).json({
+                            message: 'sensor data found',
+                            Answers: fetchedAnswers,
+                            AnswersCount: totalAnswers,
+                        })
+                    }
+                })
+                    .catch(err => {
+                        console.log('ppp', err)
+                        res.status(500).json({
+                            message: 'error fetching answers data',
+                            err: err
+                        })
+                    })
+            }).catch((err) => {
+                console.log('ll', err)
+                res.status(500).json({
+                    message: 'error fetching answers data',
+                    err: err
+                })
+            })
+        }
+    })
+}
 
 
 // .then((count)=>{

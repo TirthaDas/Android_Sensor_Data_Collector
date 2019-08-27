@@ -54,7 +54,13 @@ export class SensordataComponent implements OnInit,OnDestroy {
       
             this.SensorDataService.openSnackBar("no sensor data available yet","close")
       }
-
+      if(this.Message==="not authorized"){
+        console.log('here')
+        this.router.navigate(["/"])
+        .then(() => {
+        this.SensorDataService.openSnackBar("not authorized to view this data ","close")
+        })
+  }
 
     }
     ,err=>{
