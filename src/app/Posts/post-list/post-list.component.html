@@ -21,7 +21,8 @@
     </mat-expansion-panel-header>
     <p>{{post.content}}</p>
     <mat-action-row *ngIf="userIsAuthenticated && userId===post.creator">
-    <a mat-button color="accent" [routerLink]="['/sensordata',post.id]">VIEW</a>
+    <a mat-button  [routerLink]="['/sensordata',post.id]" >VIEW ANSWERS</a>
+    <a mat-button  [routerLink]="['/sensordata',post.id]" >VIEW SENSORDATA</a>
     <a mat-button color="primary" [routerLink]="['/edit',post.id]">EDIT</a>
     <button mat-button color="warn" (click)="onDelete(post.id)">DELETE</button>
 

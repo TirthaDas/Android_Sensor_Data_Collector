@@ -362,12 +362,14 @@ exports.saveAnswer=(req, res, next) => {
 */
 
 exports.uploadSensorData=(req,res,next)=>{
-    // console.log('requesss',req)  
+    console.log('requesss',req.file)
+
     const sensorData=new SensorData({
         name:req.body.name,
         sensorData:req.file.path,
         userId:req.body.userId,
-        projectId:req.body.projectId
+        projectId:req.body.projectId,
+        filename:req.file.originalname
         
       });
       sensorData

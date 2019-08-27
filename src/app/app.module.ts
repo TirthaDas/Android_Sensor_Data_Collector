@@ -14,7 +14,8 @@ import {
   MatExpansionModule,
   MatSnackBarModule,
   MatPaginatorModule,
-  MatProgressSpinnerModule
+  MatProgressSpinnerModule,
+  MatDividerModule
   
 } from '@angular/material';
 
@@ -25,7 +26,8 @@ import { HeaderComponent } from './header/header.component';
 import { PostListComponent } from './Posts/post-list/post-list.component';
 import { LoginComponent } from './auth/login/login.component'
 import { SignupComponent } from './auth/signup/signup.component';
-import { SensordataComponent } from './sensordata/sensordata.component'
+import { SensordataComponent } from './sensordata/sensordata.component';
+import { AnswersComponent } from './answers/answers.component'
 @NgModule({
   declarations: [
     AppComponent,
@@ -34,7 +36,8 @@ import { SensordataComponent } from './sensordata/sensordata.component'
     PostListComponent,
     LoginComponent,
     SignupComponent,
-    SensordataComponent
+    SensordataComponent,
+    AnswersComponent
   ],
   imports: [
     BrowserModule,
@@ -51,7 +54,8 @@ import { SensordataComponent } from './sensordata/sensordata.component'
     ReactiveFormsModule,
     MatSnackBarModule,
     MatPaginatorModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatDividerModule
   ],
   providers: [{provide:HTTP_INTERCEPTORS,useClass:AuthInterceptor,multi:true}],
   bootstrap: [AppComponent]

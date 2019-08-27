@@ -1,125 +1,179 @@
-const Admin=require('../models/admin')
-const bcryptjs=require('bcryptjs')
+const Admin = require('../models/admin')
+const bcryptjs = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const SensorData = require('../models/sensorData')
 const Answer = require('../models/answer')
-const Post= require('../models/post')
+const Post = require('../models/post')
+var path = require('path')
 /*
 create an admin account
 */
-exports.signup=(req,res,next)=>{
-    bcryptjs.hash(req.body.password,10)
-    .then((hash)=>{
-        const admin= new Admin({
-            email:req.body.email,
-            password:hash
-        })
-        admin.save().then((result)=>{
-            res.status(200).json({
-                message:'admin account created successfully',
-                admin:result
+exports.signup = (req, res, next) => {
+    bcryptjs.hash(req.body.password, 10)
+        .then((hash) => {
+            const admin = new Admin({
+                email: req.body.email,
+                password: hash
             })
-        }).catch((err)=>{
-            res.status(500).json({
-                message:err
+            admin.save().then((result) => {
+                res.status(200).json({
+                    message: 'admin account created successfully',
+                    admin: result
+                })
+            }).catch((err) => {
+                res.status(500).json({
+                    message: err
+                })
             })
         })
-    })
 }
 
 /*
 login an admin with token
 */
-exports.login=(req,res,next)=>{
+exports.login = (req, res, next) => {
     let fetchedAdmin;
-    Admin.findOne({'email':req.body.email}).then((admin)=>{
-        if(!admin){
+    Admin.findOne({ 'email': req.body.email }).then((admin) => {
+        if (!admin) {
             return res.status(401).json({
-                message:'auth failed'
+                message: 'auth failed'
             })
         }
-        fetchedAdmin=admin
-        return bcryptjs.compare(req.body.password,admin.password)
+        fetchedAdmin = admin
+        return bcryptjs.compare(req.body.password, admin.password)
 
     }).then(result => {
-        if(!result){
+        if (!result) {
             res.status(401).json({
-                message:'auth failed'
+                message: 'auth failed'
             })
         }
 
         // if password is valid
-        const token=jwt.sign(
-            {email:fetchedAdmin.email,adminId:fetchedAdmin._id},
+        const token = jwt.sign(
+            { email: fetchedAdmin.email, adminId: fetchedAdmin._id },
             'admin_secret_key',
-            {expiresIn:"1h"});
-            res.status(200).json({
-                token:token,
-                expiresIn:3600,
-                userid:fetchedAdmin._id
-            })
+            { expiresIn: "1h" });
+        res.status(200).json({
+            token: token,
+            expiresIn: 3600,
+            userid: fetchedAdmin._id
+        })
 
     })
-    .catch(err=>{
-        return res.status(401).json({
-            message:'auth failed'
+        .catch(err => {
+            return res.status(401).json({
+                message: 'auth failed'
+            })
         })
-    })
 }
 
 
 
-exports.getSensorData=(req,res,nex)=>{
-    console.log('oooo',req.userData.userId)
-    const projectId=req.params.id;
+exports.getSensorData = (req, res, nex) => {
+    const projectId = req.params.id;
+    console.log('oooo', projectId)
     const pageSize = +req.query.pagesize;
     const currentPage = +req.query.page;
     let fetchedData;
-    const SensorDataQuery = SensorData.find({'projectId':projectId})
+    let totalPost = 0
+    const SensorDataQuery = SensorData.find({ 'projectId': projectId })
     if (pageSize && currentPage) {
-        SensorDataQuery.skip(pageSize*(currentPage-1))
-      .limit(pageSize)
+        SensorDataQuery.skip(pageSize * (currentPage - 1))
+            .limit(pageSize)
     }
-    Post.find({'_id':projectId}).then(resl=>{
-        // console.log('..',resl)
-        if(resl[0].sensorList.length===0){
-            // console.log('...',resl)
-
+    Post.find({ '_id': projectId }).then(resl => {
+        if (resl[0].sensorList.length === 0) {
             res.status(201).json({
-                message:'no sensor data was asked in this project'
+                message: 'no sensor data was asked in this project',
+                sensorData: [],
+                sensorDataCount: totalPost,
             })
         }
-        else{
-            // console.log('....',res)
-
-      
-    SensorDataQuery.populate('userId').populate('projectId').then((data)=>{
-        if(!data || data.length==0){
-            return res.status(404).json({
-                message:'no sensor data available yet'
-            }).end()
-        }
-        console.log('tererere',data[0].projectId.creator,req.userData.userId)
-        if(data[0].projectId.creator !== req.userData.userId){
-            console.log('2')
-            return res.status(404).json({
-                message:'not authorized'
-            }).end()
-        }
-        else{
-        console.log('3')
-
-        fetchedData=data
-        // return SensorData.count()
-
-        res.status(200).json({
-                        message:'sensor data found',
-                        sensorData:fetchedData,
-                        sensorDataCount:count,
+        else {
+            SensorData.find({ 'projectId': projectId }).count().then((dt) => {
+                totalPost = dt
+                SensorDataQuery.sort([['userId', 1], ['sensorData', 1], ['createdAt', -1]]).populate('userId').populate('projectId').then((data) => {
+                    if (!data || data.length == 0) {
+                        return res.status(201).json({
+                            message: 'no sensor data available yet',
+                            sensorData: [],
+                            sensorDataCount: totalPost,
+                        }).end()
+                    }
+                    if (data[0].projectId.creator != req.userData.userId) {
+                        return res.status(404).json({
+                            message: 'not authorized'
+                        }).end()
+                    }
+                    else {
+                        fetchedData = data
+                        res.status(200).json({
+                            message: 'sensor data found',
+                            sensorData: fetchedData,
+                            sensorDataCount: totalPost,
+                        })
+                    }
+                })
+                    .catch(err => {
+                        console.log('ppp', err)
+                        res.status(500).json({
+                            message: 'error fetching sensor data',
+                            err: err
+                        })
                     })
-                }
+            }).catch((err) => {
+                console.log('ll', err)
+                res.status(500).json({
+                    message: 'error fetching sensor data',
+                    err: err
+                })
+            })
+        }
     })
-    // .then((count)=>{
+}
+
+exports.downloadData=(req,res,next)=>{
+    const projectId = req.params.id;
+    const adminId=req.userData.userId
+    const filename=req.body.filename;
+    let filepath=path.join(__dirname+'/../uploadss')+'/'+req.body.filename;
+    console.log('server',projectId,adminId)
+
+    Post.find({ '_id': projectId }).then(resl => {
+        if (resl[0].sensorList.length === 0) {
+            res.status(201).json({
+                message: 'no such project exist'
+            })
+        }
+        else {
+            SensorData.findOne({'filename':filename}).populate('projectId').then((results)=>{
+                console.log('rs',results.projectId.creator,adminId)
+                if (results.projectId.creator!= adminId){
+                    console.log('not alwd')
+                    return res.status(404).json({
+                        message: 'not authorized'
+                    }).end()
+                }
+                else{
+                    //code to download the file
+                    console.log('code here')
+                    res.sendFile(filepath)
+                }
+            })
+
+}
+    }).catch(err=>{
+        res.status(400).json({
+            message: 'error fetching file'
+        })
+    })
+
+}
+
+
+
+// .then((count)=>{
     //     console.log('4')
 
     //     Answer.find({'projectId':projectId}).then((answers)=>{
@@ -138,13 +192,3 @@ exports.getSensorData=(req,res,nex)=>{
     //         })
     //     })
     // })
-    .catch(err=>{
-        console.log('ppp',err)
-        res.status(500).json({
-            message:'error fetching sensor data',
-            err:err
-        })
-    })
-    }
-    })
-}
