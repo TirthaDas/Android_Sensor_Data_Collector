@@ -392,10 +392,11 @@ exports.uploadSensorData=(req,res,next)=>{
     console.log('in 1', result)
 
       if(!result||result.length==0){
-        ActiveProject.findOne({'projectId':projectId,'userId':userId}).then((rsl)=>{
+        ActiveProject.deleteOne({'projectId':projectId,'userId':userId}).then((rsl)=>{
+          
           res.json({
-            message:'project not found',
-            activeProject:rsl._id
+            message:'project not found'
+            // activeProject:rsl._id
           })
         }).catch(err=>{
           console.log('first catch,',err)
