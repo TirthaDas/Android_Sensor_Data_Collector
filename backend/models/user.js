@@ -20,12 +20,12 @@ const userSchema = mongoose.Schema({
     type:String,
     trim:true,
     default:true
-  },
-  Gender: {
-    type:String,
-    trim:true,
-    default:true
   }
+  // Gender: {
+  //   type:String,
+  //   trim:true,
+  //   default:true
+  // }
   
 });
 

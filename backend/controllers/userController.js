@@ -18,8 +18,8 @@ exports.createUser= (req,res,next)=>{
           Fullname:req.body.Fullname,
           Username:req.body.Username,
           Email:req.body.Email,
-          Password:req.body.Password,
-          Gender:req.body.Gender,
+          Password:req.body.Password
+          // Gender:req.body.Gender,
         });
         user.save().then((createdUser) => {
           res.status(200).json({
@@ -273,7 +273,7 @@ exports.getAllActiveProjects=(req, res, next) => {
     const userId = req.body.userId;
     console.log('active Projects searching in db',req.body);
     
-    ActiveProject.find({"userId":userId}).then((activeProjects) => {
+    ActiveProject.find({"userId":userId}).populate('projectId').then((activeProjects) => {
       console.log('active Projects found in db',activeProjects);
       res.status(200).json({
         message:'Active Projects fetched succesfully',
@@ -382,4 +382,44 @@ exports.uploadSensorData=(req,res,next)=>{
         console.log(err)
       })
 
+  }
+
+  exports.checkIfProjectExist=(req,res,next)=>{
+    const projectId=req.body.projectId
+    const userId=req.body.userId
+    console.log('in 1', userId,projectId)
+    Post.find({'_id':projectId}).then((result)=>{
+    console.log('in 1', result)
+
+      if(!result||result.length==0){
+        ActiveProject.findOne({'projectId':projectId,'userId':userId}).then((rsl)=>{
+          res.json({
+            message:'project not found',
+            activeProject:rsl._id
+          })
+        }).catch(err=>{
+          console.log('first catch,',err)
+          res.json({
+            message:'error fetching project'
+            // activeProject:''
+    
+          })
+        })
+        
+      }
+      else{
+      console.log('in else')
+        res.json({
+          message:'project found'
+          // activeProject:''
+        })
+      }
+    }).catch(err=>{
+      console.log('second catch',err)
+      res.json({
+        message:'error fetching project'
+        // activeProject:''
+
+      })
+    })
   }

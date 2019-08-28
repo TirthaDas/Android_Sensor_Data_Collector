@@ -14,14 +14,21 @@
                 <mat-expansion-panel-header>
                   <mat-panel-title>
                       <div>
-                        {{data.questionId.question}}
+                        <span style="float: right">
+                           question: &nbsp; {{data.questionId.question}}
+
+                        </span>
+                        <span style="  float: right; margin-right: 2rem">
+                            user: &nbsp; {{data.userId.Username}}
+                          
+                        </span>
                       </div>
+                      
                   </mat-panel-title>
-                  <!-- <mat-panel-description>
-                    Type your name and age
-                  </mat-panel-description> -->
+                  <mat-panel-description >
+                  </mat-panel-description>
                 </mat-expansion-panel-header>
-                <p>{{data.answer}}</p>
+                <p>answer: &nbsp;{{data.answer}}</p>
                 
                 </mat-expansion-panel>
  </mat-accordion>

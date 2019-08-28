@@ -24,5 +24,7 @@ routes.post('/api/getAllActiveProjects',userController.getAllActiveProjects);
 routes.post('/api/getQestions',userController.getQuestions);
 routes.post('/api/saveAnswers',userController.saveAnswer);
 routes.post("/api/uploadSensorData",upload.single('SensorData'),userController.uploadSensorData)
+routes.post("/api/checkIfProjectExist",userController.checkIfProjectExist)
+
   
 module.exports=routes;
