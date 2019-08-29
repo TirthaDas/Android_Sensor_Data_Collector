@@ -1,10 +1,10 @@
-<mat-card>
+<mat-card >
         <mat-spinner *ngIf="isloading"></mat-spinner>
         <form (submit)="onSignup(signupForm)" *ngIf="!isloading" #signupForm="ngForm">
-                <h1 class="headline">
+                <h1 class="headline info-text mat-body-1" style="font-size: 30px">
                         Welcome to Sensor Data Collector site <br>
                 </h1>
-                <p class="subtitle">please sign up to continue</p>
+                <p class="subtitle info-text mat-body-1" style="font-size: 22px">please sign up to continue</p>
             <mat-form-field>
                 <input matInput type="email" placeholder="E-Mail" name="email" ngModel #emailInput="ngModel" required email>
                 <mat-error *ngIf="emailInput.invalid">please enter a valid email</mat-error>

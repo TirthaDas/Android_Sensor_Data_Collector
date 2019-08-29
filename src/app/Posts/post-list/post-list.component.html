@@ -1,7 +1,8 @@
 <mat-spinner *ngIf="isloading"></mat-spinner>
+<div >
 <mat-accordion multi="true" *ngIf="posts.length>0 && !isloading">
-    <mat-card ><p class=" info-text mat-body-1 subtitle">
-        ALL  &nbsp; &nbsp;  PROJECTS <br>
+    <mat-card style="margin-bottom: 1rem"><p class=" info-text mat-body-1 subtitle" >
+        ALL  &nbsp;   PROJECTS <br>
           
       </p>
     </mat-card>
@@ -30,6 +31,7 @@
 
   </mat-expansion-panel>
 </mat-accordion>
+</div>
 <mat-paginator *ngIf="posts.length>0" [length]="totalPosts" [pageSize]="postsPerPage" [pageSizeOptions]="pageSizeOptions" (page)="onChangedPage($event)" [pageIndex]="currentPage-1">
 
 </mat-paginator>

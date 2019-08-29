@@ -1,4 +1,16 @@
+
 main{
   width: 50%;
-  margin: 1rem auto;
+  margin:  auto;
+  padding-top: 5rem;
+}
+
+div, .image{
+  
+  /* all: unset; */
+  height:48em; background-size:cover; width:auto;
+  background-image:url('../assets/background.jpg');
+  background-position:50% 50%;
+  margin: 0 !important;
+  padding: 0
 }
