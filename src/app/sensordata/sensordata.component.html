@@ -3,12 +3,12 @@
  <mat-spinner *ngIf="isloading"></mat-spinner>
  
  <div style="text-align: center"> 
- <h3>ALL SENSOR DATA</h3>
+ <h3 style="color: azure">ALL SENSOR DATA</h3>
 
  </div>
     <div  *ngIf="sensorData.length>0 && !isloading" >
         <mat-card *ngFor="let data of sensorData"
-        style="margin-bottom: .5rem; width: 100%">
+        style="margin-bottom: .5rem; width: 95.5%">
             <div >
                 <span>
                 {{data.sensorData.substring(data.sensorData.lastIndexOf('/')+1)}}

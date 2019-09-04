@@ -2,14 +2,14 @@
 main{
   width: 50%;
   margin:  auto;
-  padding-top: 5rem;
+  padding-top: 2rem;
 }
 
 div, .image{
   
   /* all: unset; */
-  height:48em; background-size:cover; width:auto;
-  background-image:url('../assets/background.jpg');
+  height:100%; background-size:cover; width:auto;
+  background-image:url('../assets/back8.jpg');
   background-position:50% 50%;
   margin: 0 !important;
   padding: 0

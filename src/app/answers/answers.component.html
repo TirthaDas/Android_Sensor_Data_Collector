@@ -4,13 +4,13 @@
  
  <div style="text-align: center"> 
 <mat-card >
-    <p class=" info-text mat-body-1">
+    <p class=" info-text mat-body-1" >
     ALL &nbsp; ANSWERS 
 </p></mat-card>
 
  </div>
  <mat-accordion *ngIf="answerdata.length>0 && !isloading" multi="true">
-        <mat-expansion-panel *ngFor="let data of answerdata" style="margin-bottom: .5rem" >
+        <mat-expansion-panel *ngFor="let data of answerdata" style="margin-bottom: .5rem;margin-top: .5rem" >
                 <mat-expansion-panel-header>
                   <mat-panel-title>
                       <div>
