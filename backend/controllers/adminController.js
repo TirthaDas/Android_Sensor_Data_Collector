@@ -10,6 +10,7 @@ const Question =require('../models/question')
 create an admin account
 */
 exports.signup = (req, res, next) => {
+    console.log('sign up initiated')
     bcryptjs.hash(req.body.password, 10)
         .then((hash) => {
             const admin = new Admin({
@@ -22,6 +23,7 @@ exports.signup = (req, res, next) => {
                     admin: result
                 })
             }).catch((err) => {
+                console.log('err',err)
                 res.status(500).json({
                     message: err
                 })

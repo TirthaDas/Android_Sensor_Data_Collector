@@ -69,6 +69,7 @@ export class AuthService {
                 const expiresationDate=new Date(now.getTime()+expirationDuration*1000);
                 this.saveAuthData(token,expiresationDate,this.userId);
                 this.Router.navigate(['/']);
+                this.openSnackBar('welcome to Sensor Data Collector','close')
             }
             
         },(err)=>{

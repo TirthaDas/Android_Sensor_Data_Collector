@@ -1,5 +1,6 @@
 const Post = require('../models/post');
 const Question = require('../models/question')
+const ActiveProject=require('../models/activeProject')
 
 //methods
 
@@ -86,9 +87,17 @@ exports.updatePost = (req, res, next) => {
     .then((post) => {
       console.log('post',post)
       if(post.n>0){
-        res.status(200).json({
-          message: 'post updated successfully'
+        ActiveProject.updateOne({ "projectId": req.params.id},{$set:{title: req.body.title, content: req.body.content}}).then(()=>{
+          res.status(200).json({
+            message: 'post updated successfully'
+          })
+        }).catch(err=>{
+          console.log(err);
+          res.status(400).json({
+            message: 'error updating post'
+          })
         })
+        
       }
       else{
         res.status(401).json({
