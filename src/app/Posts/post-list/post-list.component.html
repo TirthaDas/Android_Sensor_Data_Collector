@@ -23,7 +23,7 @@
     <p>{{post.content}}</p>
     <mat-action-row *ngIf="userIsAuthenticated && userId===post.creator">
     <a mat-button  [routerLink]="['/answerdata',post.id]" >VIEW ANSWERS</a>
-    <a mat-button  [routerLink]="['/sensordata',post.id]" >VIEW SENSORDATA</a>
+    <a mat-button  [routerLink]="['/sensordata',post.id]" >VIEW SENSOR DATA</a>
     <a mat-button color="primary" [routerLink]="['/edit',post.id]">EDIT</a>
     <button mat-button color="warn" (click)="onDelete(post.id)">DELETE</button>
 

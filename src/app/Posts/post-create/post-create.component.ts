@@ -99,6 +99,7 @@ export class PostCreateComponent implements OnInit,OnDestroy {
       if((!form.controls.sensorType.value)&&(!form.controls.FirstQuestion.value&&!form.controls.SecondQuestion.value&&!form.controls.ThirdQuestion.value&&!form.controls.FourthQuestion.value&&!form.controls.FifthQuestion.value)){
         console.log('**********')
         alert("please either select a sensor from the dropdown or add some questions in the questionnaire")
+        this.isloading=false
         return;
       }
       this.postService.addPosts(form.value.title,form.value.content,form.controls.duration.value,form.controls.sensorType.value,form.controls.FirstQuestion.value,form.controls.SecondQuestion.value,form.controls.ThirdQuestion.value,form.controls.FourthQuestion.value,form.controls.FifthQuestion.value);

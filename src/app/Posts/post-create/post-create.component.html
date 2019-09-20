@@ -5,7 +5,7 @@
 
     <mat-form-field>
       <input matInput type="text" name="title" [ngModel]="post?.title" placeholder="Enter a project title" required
-        minlength="3" #title="ngModel">
+         #title="ngModel">
       <mat-error *ngIf="title.invalid">please enter a projectt title</mat-error>
     </mat-form-field>
     <mat-form-field>

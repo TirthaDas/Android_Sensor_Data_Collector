@@ -2,10 +2,14 @@
 
  <mat-spinner *ngIf="isloading"></mat-spinner>
  
- <div style="text-align: center"> 
+ <!-- <div style="text-align: center"> 
  <h3 style="color: azure">ALL SENSOR DATA</h3>
 
- </div>
+ </div> -->
+ <mat-card style=" margin-bottom: .5rem" >
+    <p class=" info-text mat-body-1" style="text-align: center" >
+        ALL SENSOR DATA 
+</p></mat-card>
     <div  *ngIf="sensorData.length>0 && !isloading" >
         <mat-card *ngFor="let data of sensorData"
         style="margin-bottom: .5rem; width: 95.5%">
@@ -43,6 +47,6 @@
 
 
 <div style="text-align: center" *ngIf="sensorData.length==0 && !isloading"> 
-        <h4>NO SENSOR DATA AVAILABLE YET FOR THIS PROJECT</h4>
+        <h4 class="info-text mat-body-1" style="color: azure" >NO SENSOR DATA AVAILABLE YET FOR THIS PROJECT</h4>
        
 </div>

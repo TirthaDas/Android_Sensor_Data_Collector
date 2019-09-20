@@ -14,6 +14,7 @@ export class PostListComponent implements OnInit,OnDestroy {
 posts : post[] = [];
 totalPosts=0
 postsPerPage=3
+currentPostsPerPage=3
 currentPage=1
 pageSizeOptions=[1,2,3, 5,10]
 isloading=false
@@ -27,7 +28,10 @@ private postSub :Subscription;
   }
 
   ngOnInit() {
+    console.log("posts per page",this.postsPerPage)
     this.isloading=true
+    this.postsPerPage=this.postService.getPostPerPage()
+    this.currentPage=this.postService.getCurrentPage()
     this.postService.getPosts(this.postsPerPage,this.currentPage)
     this.userId=this.AuthService.getUserId();
     this.postSub=this.postService.getPostUpdateListener().subscribe((postData:{posts:post[],postCount:number})=>{
@@ -51,8 +55,9 @@ private postSub :Subscription;
     this.currentPage=pageData.pageIndex+1
     this.postsPerPage=pageData.pageSize
     this.postService.getPosts(this.postsPerPage,this.currentPage)
-    console.log("^^^^^^^^^^^^^^^Xxxxx",this.userId,)
-      console.log("^^^^^^^^^^^^^^^Xxxxx",this.posts)
+    console.log("changed posts per page",this.postsPerPage,)
+    this.postService.setPostPerPage(pageData.pageSize)
+    this.postService.setCurrentPage(pageData.pageIndex+1)
   }
   onDelete(postId:string){
     // if (this.posts.length === 1) { // checks if this is the last post on the site 

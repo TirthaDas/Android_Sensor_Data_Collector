@@ -2,10 +2,12 @@
     <mat-spinner *ngIf="isloading"></mat-spinner>
     <form (submit)="onLogin(loginForm)" *ngIf="!isloading" #loginForm="ngForm">
         
-        <h1 class="headline info-text mat-body-1" style="font-size: 30px">
-                Welcome to Sensor Data Collector site <br>
+        <p class=" info-text mat-body-1" style="font-size: 22px;text-align: center">Welcome to</p>
+        
+        <h1 class="headline info-text mat-body-1" style="font-size: 42px">
+                Sensor Data Collector  <br>
         </h1>
-        <p class="subtitle info-text mat-body-1" style="font-size: 22px">please login to continue</p>
+        <p class=" info-text mat-body-1" style="font-size: 22px;text-align: center">please login to continue</p>
     
        
         <mat-form-field>

@@ -1,3 +1,4 @@
+import { Message } from '@angular/compiler/src/i18n/i18n_ast';
 import { Router } from '@angular/router';
 import { post } from './post.model';
 import { Injectable } from '@angular/core';
@@ -11,7 +12,8 @@ export class PostsService {
 
   private posts: post[] = [];
   private postUpdated = new Subject<{posts:post[],postCount:number}>()
-
+  postPerPageInService=3
+  CurrentPage=1
   constructor(private http: HttpClient, public router: Router, private _snackBar: MatSnackBar) { }
 
   getPosts(postsPerPage, currentPage) {
@@ -41,7 +43,18 @@ export class PostsService {
       }
       )
   }
-
+setPostPerPage(val){
+  this.postPerPageInService=val
+}
+getPostPerPage(){
+  return this.postPerPageInService
+}
+setCurrentPage(val){
+  this.CurrentPage=val
+}
+getCurrentPage(){
+  return this.CurrentPage
+}
   getPostUpdateListener() {
     return this.postUpdated.asObservable()
   }
@@ -69,11 +82,21 @@ export class PostsService {
 
     this.http.put('http://localhost:3000/api/posts/' + id, post)
       .subscribe(response => {
+        console.log('000++++++++++',response)
         this.router.navigate(["/"])
           .then(() => {
             this.openSnackBar("project updated successfully", "close")
           })
 
+      },err=>{
+        console.log('000++++++++++',err.error.message)
+        if(err.error.message==="not authorized")
+        {
+          this.router.navigate(["/"])
+          .then(() => {
+            this.openSnackBar("not authorized to perform this action", "close")
+          })
+        }
       })
   }
 
